@@ -2,7 +2,7 @@
 
 -- общее число юнитов в разичных фракциях
 
-CREATE OR REPLACE TEMP VIEW VIEW_FRACTIONS_ARMIES_SIZE AS
+CREATE OR REPLACE VIEW VIEW_FRACTIONS_ARMIES_SIZE AS
   (SELECT
     FRACTION.fraction_nm
     ,sum(ARMY.unit_number_amt)
@@ -22,7 +22,7 @@ FROM
 
 -- города, в которых построен бордель
 
-CREATE OR REPLACE TEMP VIEW VIEW_CITIES_WITH_BROTHEL AS
+CREATE OR REPLACE VIEW VIEW_CITIES_WITH_BROTHEL AS
   (SELECT
     CB.city_nm
   FROM
@@ -36,7 +36,7 @@ CREATE OR REPLACE TEMP VIEW VIEW_CITIES_WITH_BROTHEL AS
     ON
       CB.building_id = BUILDING.building_id
   WHERE
-    BUILDING.building_id = 6
+    BUILDING.building_nm = 'brothel'
   );
 
 SELECT *

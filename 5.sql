@@ -1,13 +1,20 @@
 -- 5) 5 простых запросов
 
--- id всех анлнийских лучников в Лондоне
+-- id всех анлнийских лучников в армии Эдварда III
 
 SELECT
   unit_id
 FROM
   DB_PROJECT_KISLYAKOV.UNIT
 WHERE
-  army_id = 0
+  army_id = (
+    SELECT
+      army_id
+    FROM
+      DB_PROJECT_KISLYAKOV.ARMY
+    WHERE
+      commander_nm = 'Edward III'
+  )
   AND unit_type_dk = 0;
 
 -- сумма хп всех войск Шотландии
@@ -23,7 +30,14 @@ WHERE
     FROM
       DB_PROJECT_KISLYAKOV.ARMY
     WHERE
-      fraction_id = 3
+      fraction_id = (
+        SELECT
+          fraction_id
+        FROM
+          DB_PROJECT_KISLYAKOV.FRACTION
+        WHERE
+          fraction_nm = 'Scotland'
+      )
   );
 
 -- все виды пехоты, их характеристики и стоимость
@@ -53,7 +67,14 @@ WHERE
       DB_PROJECT_KISLYAKOV.CITY
     WHERE
       food_amt - unit_created_amt <= 4
-      AND fraction_id = 0
+      AND fraction_id = (
+        SELECT
+          fraction_id
+        FROM
+          DB_PROJECT_KISLYAKOV.FRACTION
+        WHERE
+          fraction_nm = 'England'
+      )
   );
 
 -- города в которых построен замок или казармы
@@ -70,6 +91,13 @@ WHERE
     FROM
       DB_PROJECT_KISLYAKOV.CITY_X_BUILDING
     WHERE
-      building_id = 0
-      OR building_id = 2
+      building_id IN (
+        SELECT
+          building_id
+        FROM
+          DB_PROJECT_KISLYAKOV.BUILDING
+        WHERE
+          building_nm = 'barracks'
+          OR building_nm = 'castle'
+      )
   );

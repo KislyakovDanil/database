@@ -1,6 +1,6 @@
 -- 7)  по 1 представлению на таблицу
 
-CREATE OR REPLACE TEMP VIEW VIEW_FRACTION AS
+CREATE OR REPLACE VIEW VIEW_FRACTION AS
   (SELECT
     fraction_nm
     ,total_gold_amt
@@ -12,7 +12,7 @@ SELECT *
 FROM
   VIEW_FRACTION;
 
-CREATE OR REPLACE TEMP VIEW VIEW_UNIT_TYPE AS
+CREATE OR REPLACE VIEW VIEW_UNIT_TYPE AS
   (SELECT
     unit_type_nm
     ,max_hp_amt
@@ -27,7 +27,7 @@ SELECT *
 FROM
   VIEW_UNIT_TYPE;
 
-CREATE OR REPLACE TEMP VIEW VIEW_BUILDING AS
+CREATE OR REPLACE VIEW VIEW_BUILDING AS
   (SELECT
     building_nm
     ,food_coeff
@@ -42,21 +42,28 @@ SELECT *
 FROM
   VIEW_BUILDING;
 
-CREATE OR REPLACE TEMP VIEW VIEW_ENGLISH_ARMIES AS
+CREATE OR REPLACE VIEW VIEW_ENGLISH_ARMIES AS
   (SELECT
     commander_nm
     ,unit_number_amt
   FROM
     DB_PROJECT_KISLYAKOV.ARMY
   WHERE
-    fraction_id = 0
+    fraction_id = (
+      SELECT
+        fraction_id
+      FROM
+        DB_PROJECT_KISLYAKOV.FRACTION
+      WHERE
+        fraction_nm = 'England'
+    )
   );
 
 SELECT *
 FROM
   VIEW_ENGLISH_ARMIES;
 
-CREATE OR REPLACE TEMP VIEW VIEW_ENGLISH_CITIES AS
+CREATE OR REPLACE VIEW VIEW_ENGLISH_CITIES AS
   (SELECT
     city_nm
     ,food_amt
@@ -66,24 +73,38 @@ CREATE OR REPLACE TEMP VIEW VIEW_ENGLISH_CITIES AS
   FROM
     DB_PROJECT_KISLYAKOV.CITY
   WHERE
-    fraction_id = 0
+    fraction_id = (
+      SELECT
+        fraction_id
+      FROM
+        DB_PROJECT_KISLYAKOV.FRACTION
+      WHERE
+        fraction_nm = 'England'
+    )
   );
 
 SELECT *
 FROM
   VIEW_ENGLISH_CITIES;
 
-CREATE OR REPLACE TEMP VIEW VIEW_0_ARMY_UNITS AS
+CREATE OR REPLACE VIEW VIEW_LONDON_UNITS AS
   (SELECT
-    city_id
+    army_id
     ,unit_type_dk
     ,hp_amt
   FROM
     DB_PROJECT_KISLYAKOV.UNIT
   WHERE
-    army_id = 0
+    city_id = (
+      SELECT
+        city_id
+      FROM
+        DB_PROJECT_KISLYAKOV.CITY
+      WHERE
+        city_nm = 'London'
+    )
   );
 
 SELECT *
 FROM
-  VIEW_0_ARMY_UNITS;
+  VIEW_LONDON_UNITS;
